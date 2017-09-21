@@ -7,6 +7,7 @@ v1.0, 2017-09-18
 :sectanchors:
 :sectlinks:
 :source-highlighter: pygments
+:numbered:
 
 Microservices have been all the rage for a while. If you attended any tech conference or read software engineering blogs lately, you'll either be amazed or fed up with all the stories that companies love to share about their microservices journey.
 
@@ -20,25 +21,23 @@ This is a long post, go grab a cup of coffee and take your time. Maybe add it to
 
 Ready? Let's rock!
 
-## <abbr title="too long; didn't read">tl;dr</abbr>
+== Too long; Didn't read
 Here's what you'll take away from this book:
 
-<div class="highlight">
-    <ol>
-	<li>Automate your tests (whoa, surprise!)</li>
-	<li>Continuous delivery makes your life easier</li>
-	<li>Remember the <a href="https://martinfowler.com/bliki/TestPyramid.html">test pyramid</a> <em>(don't be too confused by the original names of the layers, though)</em></li>
-	<li>Write tests with different granularity</li>
-	<li>Use unit test to test the insides of your application</li>
-	<li>Use integration tests to test data serialization/deserialization</li>
-	<li>Test collaboration between services with contract tests (CDC)</li>
-	<li>Use end-to-end tests sparingly, limit to high-value user journeys</li>
-	<li>Don't just test from a developer's perspective, make sure to test features from a user's perspective as well</li>
-	<li>Exploratory testing will spot issues your build pipeline didn't catch</li>
-    </ol>
-</div>
-
-{% include table_of_contents.html %}
+[NOTE]
+.TL;DR
+====
+. Automate your tests (whoa, surprise!)
+. Continuous delivery makes your life easier
+. Remember the https://martinfowler.com/bliki/TestPyramid.html[test pyramid] _(don't be too confused by the original names of the layers, though)_
+. Write tests with different granularity
+. Use unit test to test the insides of your application
+. Use integration tests to test data serialization/deserialization
+. Test collaboration between services with contract tests (CDC)
+. Use end-to-end tests sparingly, limit to high-value user journeys
+. Don't just test from a developer's perspective, make sure to test features from a user's perspective as well
+. Exploratory testing will spot issues your build pipeline didn't catch
+====
 
 ## Microservices Need (Test) Automation
 Microservices go hand in hand with **continuous delivery**, a practice where you automatically ensure that your software can be released into production any time. You use a **build pipeline** to automatically test and deploy your application to your testing and production environments.
@@ -68,16 +67,16 @@ _The test pyramid_
 
 Mike Cohn's original test pyramid consists of three layers that your test suite should consist of (bottom to top):
 
-  1. Unit Tests
-  2. Service Tests
-  3. User Interface Tests
+. Unit Tests
+. Service Tests
+. User Interface Tests
 
 Unfortunately the concept of the test pyramid falls a little short if you take a closer look. https://watirmelon.blog/2011/06/10/yet-another-software-testing-pyramid/[Some argue] that either the naming or some conceptual aspects of Mike Cohn's test pyramid are not optimal, and I have to agree. From a modern point of view the test pyramid seems overly simplistic and can therefore be a bit misleading.
 
 Still, due to it's simplicity the essence of the test pyramid serves as a good rule of thumb when it comes to establishing your own test suite. Your best bet is to remember two things from Cohn's original test pyramid:
 
-  1. Write tests with different granularity
-  2. The more high-level you get the fewer tests you should have
+. Write tests with different granularity
+. The more high-level you get the fewer tests you should have
 
 Stick to the pyramid shape to come up with a healthy, fast and maintainable test suite: Write _lots_ of small and fast _unit tests_. Write _some_ more coarse-grained tests and _very few_ high-level tests that test your application from end to end. Watch out that you don't end up with a https://watirmelon.blog/2012/01/31/introducing-the-software-testing-ice-cream-cone/[test ice-cream cone] that will be a nightmare to maintain and takes way too long to run.
 
@@ -234,10 +233,10 @@ This approach allows the providing team to implement only what's really necessar
 
 The Consumer-Driven Contract approach would leave you with a process looking like this:
 
-  1. The consuming team writes automated tests with all consumer expectations
-  3. They publish the tests for the providing team
-  4. The providing team runs the CDC tests continuously and keeps them green
-  5. Both teams talk to each other once the CDC tests break
+. The consuming team writes automated tests with all consumer expectations
+. They publish the tests for the providing team
+. The providing team runs the CDC tests continuously and keeps them green
+. Both teams talk to each other once the CDC tests break
 
 If your organisation adopts microservices, having CDC tests is a big step towards establishing autonomous teams. CDC tests are an automated way to foster team communication. They ensure that interfaces between teams are working at any time. Failing CDC tests are a good indicator that you should walk over to the affected team, have a chat about any upcoming API changes and figure out how you want to move forward.
 
@@ -338,18 +337,18 @@ Duplicating tests can be quite tempting, especially when you're new to test auto
 = Getting Hands on in Java & Spring Boot
 The first part was a round-trip of what it means to test microservices. We looked at the test pyramid and found out that you should write different types of automated tests to come up with a reliable and effective test suite.
 
-While the first chapter was more abstract this chapter will be more hands on and include code, lots of code. We will explore how we can implement the concepts discussed before. The technology of choice for this chapter will be **Java** with **Spring Boot** as the application framework. Most of the tools and libraries outlined here work for Java in general and don't require you to use Spring Boot at all. A few of them are test helpers specific to Spring Boot. Even if you don't use Spring Boot for your application there will be a lot to learn for you.
+While the first part was more abstract this part will be more hands on and include code, lots of code. We will explore how we can implement the concepts discussed before. The technology of choice for this part will be **Java** with **Spring Boot** as the application framework. Most of the tools and libraries outlined here work for Java in general and don't require you to use Spring Boot at all. A few of them are test helpers specific to Spring Boot. Even if you don't use Spring Boot for your application there will be a lot to learn for you.
 
 == Tools and Libraries We'll Look at
-This chapter will demonstrate several tools and libraries that help us implement automated tests. The most important ones are:
+This part will demonstrate several tools and libraries that help us implement automated tests. The most important ones are:
 
-  * http://junit.org[**JUnit**] as our test runner
-  * http://site.mockito.org/[**Mockito**] for mocking dependencies
-  * http://wiremock.org/[**Wiremock**] for stubbing out third-party services
-  * https://docs.spring.io/spring-boot/docs/current/reference/html/boot-features-testing.html#boot-features-testing-spring-boot-applications-testing-autoconfigured-mvc-tests) for writing HTTP integration tests (this one's Spring specific[**MockMVC**]
-  * https://docs.pact.io/[**Pact**] for writing CDC tests
-  * http://docs.seleniumhq.org/[**Selenium**] for writing UI-driven end-to-end tests
-  * https://github.com/rest-assured/rest-assured[**REST-assured**] for writing REST API-driven end-to-end tests
+http://junit.org[JUnit]:: as our test runner
+http://site.mockito.org/[Mockito]:: for mocking dependencies
+http://wiremock.org/[Wiremock]:: for stubbing out third-party services
+https://docs.spring.io/spring-boot/docs/current/reference/html/boot-features-testing.html#boot-features-testing-spring-boot-applications-testing-autoconfigured-mvc-tests)[MockMVC]:: for writing HTTP integration tests (this one's Spring specific)
+https://docs.pact.io/[Pact]:: for writing CDC tests
+http://docs.seleniumhq.org/[Selenium]:: for writing UI-driven end-to-end tests
+https://github.com/rest-assured/rest-assured[REST-assured]:: for writing REST API-driven end-to-end tests
 
 == The Sample Application
 I've written a https://github.com/hamvocke/spring-testing[simple microservice] including a test suite with tests for the different layers of the test pyramid. There are more tests than necessary for an application of this size. The tests on different levels overlap. This actively contradicts the advice that you should avoid test duplication throughout your test pyramid. Here I decided to go for duplication for demonstration purposes. Please keep in mind that this is not what you want for your real-world application. Duplicated tests are smelly and will be more annoying than helpful in the long term.
