@@ -5,7 +5,6 @@ v1.0, 2017-09-18
 :homepage: http://www.hamvocke.com/blog/testing-microservices
 :toc:
 :sectanchors:
-:sectlinks:
 :source-highlighter: pygments
 :numbered:
 
