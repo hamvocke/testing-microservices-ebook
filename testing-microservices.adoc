@@ -44,7 +44,7 @@ Microservices go hand in hand with **continuous delivery**, a practice where you
 
 Once you advance on your microservices quest you'll be juggling dozens, maybe even hundreds of microservices. At this point building, testing and deploying these services manually becomes impossible -- unless you want to spend all your time with manual, repetitive work instead of delivering working software. Automating everything -- from build to tests, deployment and infrastructure -- is your only way forward.
 
-!/assets/img/uploads/buildPipeline.png[build pipeline]
+image::buildPipeline.png[build pipeline]
 *Use build pipelines to automatically and reliably get your software into production*
 
 Most microservices success stories are told by teams who use continuous delivery or **continuous deployment** (every software change that's proven to be releasable will be deployed to production). These teams make sure that changes get into the hands of their customers quickly.
@@ -62,7 +62,7 @@ Automation in general and test automation specifically are essential to building
 ## The Test Pyramid
 If you want to get serious about automated tests for your software there is one key concept that you should know about: the **test pyramid**. Mike Cohn came up with this concept in his book https://www.amazon.com/dp/0321579364/ref=cm_sw_r_cp_dp_T2_bbyqzbMSHAG05[Succeeding with Agile]. It's a great visual metaphor telling you to think about different layers of testing. It also tells you how much testing to do on each layer.
 
-!/assets/img/uploads/testPyramid.png[Test Pyramid]
+image::testPyramid.png[Test Pyramid]
 _The test pyramid_
 
 Mike Cohn's original test pyramid consists of three layers that your test suite should consist of (bottom to top):
@@ -90,7 +90,7 @@ While the test pyramid suggests that you'll have three different types of tests 
 ### Unit tests
 The foundation of your test suite will be made up of unit tests. Your unit tests make sure that a certain unit (your _subject under test_) of your codebase works as intended. The number of unit tests in your test suite will largely outnumber any other type of test.
 
-!/assets/img/uploads/unitTest.png[unit tests]
+image::unitTest.png[unit tests]
 *A unit test typically replaces external collaborators with mocks or stubs*
 
 #### What's a Unit?
@@ -129,7 +129,7 @@ All non-trivial applications will integrate with some other parts (databases, fi
 
 Integration tests live at the boundary of your service. Conceptually they're always about triggerng an action that leads to integrating with the outside part (filesystem, database, etc). A database integration test would probably look like this:
 
-!/assets/img/uploads/dbIntegrationTest.png[a database integration test]
+image::dbIntegrationTest.png[a database integration test]
 *A database integration test integrates your code with a real database*
 
     1. start a database
@@ -140,7 +140,7 @@ Integration tests live at the boundary of your service. Conceptually they're alw
 
 Another example, an integration test for your REST API could look like this:
 
-!/assets/img/uploads/httpIntegrationTest.png[an HTTP integration test]
+image::httpIntegrationTest.png[an HTTP integration test]
 *An HTTP integration test checks that real HTTP calls hit your code correctly*
 
     1. start your application
@@ -171,7 +171,7 @@ Most applications have some sort of user interface. Typically we're talking abou
 
 _UI tests_ test that the user interface of your application works correctly. User input should trigger the right actions, data should be presented to the user, the UI state should change as expected.
 
-!/assets/img/uploads/ui_tests.png[user interface tests]
+image::ui_tests.png[user interface tests]
 
 UI Tests and end-to-end tests are sometimes (as in Mark Cohn's case) said to be the same thing. For me this conflates two things that are not _necessarily_ related.
 
@@ -208,7 +208,7 @@ Interfaces between microservices can come in different shapes and technologies. 
 
 For each interface there are two parties involved: the **provider** and the **consumer**. The provider serves data to consumers. The consumer processes data obtained from a provider. In a REST world a provider builds a REST API with all required endpoints; a consumer makes calls to this REST API to fetch data or trigger changes in the other service. In an asynchronous, event-driven world, a provider (often rather called **publisher**) publishes data to a queue; a consumer (often called **subscriber**) subscribes to these queues and reads and processes data.
 
-!/assets/img/uploads/contract_tests.png[contract tests]
+image::contract_tests.png[contract tests]
 _Each interface has a providing (or publishing) and a consuming (or subscribing) party. The specification of an interface can be considered a contract._
 
 As you often spread the consuming and providing services across different teams you find yourself in the situation where you have to clearly specify the interface between these services (the so called **contract**). Traditionally companies have approached this problem in the following way:
@@ -226,7 +226,7 @@ In a more agile organisation you should take the more efficient and less wastefu
 
 **Consumer-Driven Contract tests** (**CDC tests**) let the consumers drive the implementation of a contract. Using CDC, consumers of an interface write tests that check the interface for all data they need from that interface. The consuming team then publishes these tests so that the publishing team can fetch and execute these tests easily. The providing team can now develop their API by running the CDC tests. Once all tests pass they know they have implemented everything the consuming team needs.
 
-!/assets/img/uploads/cdc_tests.png[CDC tests]
+image::cdc_tests.png[CDC tests]
 _Contract tests ensure that the provider and all consumers of an interface stick to the defined interface contract. With CDC tests consumers of an interface publish their requirements in the form of automated tests; the providers fetch and execute these tests continuously_
 
 This approach allows the providing team to implement only what's really necessary (keeping things simple, <abbr title="You ain't gonna need it">YAGNI</abbr> and all that). The team providing the interface should fetch and run these CDC tests continuously (in their build pipeline) to spot any breaking changes immediately. If they break the interface their CDC tests will fail, preventing breaking changes to go live. As long as the tests stay green the team can make any changes they like without having to worry about other teams.
@@ -253,7 +253,7 @@ Consumer-Driven Contract tests can be a real game changer as you venture further
 ### End-to-End Tests
 Testing your deployed application via its user interface is the most end-to-end way you could test your application. The previously described, webdriver driven UI tests are a good example of end-to-end tests.
 
-!/assets/img/uploads/e2etests.png[an end-to-end test]
+image::e2etests.png[an end-to-end test]
 _End-to-end tests test your entire, completely integrated system_
 
 End-to-end tests give you the biggest confidence when you need to decide if your software is working or not. http://nightwatchjs.org/[Selenium](http://docs.seleniumhq.org/) and the [WebDriver Protocol](https://www.w3.org/TR/webdriver/) allow you to automate your tests by automatically driving a (headless) browser against your deployed services, performing clicks, entering data and checking the state of your user interface. You can use Selenium directly or use tools that are build on top of it, [Nightwatch] being one of them.
@@ -314,7 +314,7 @@ Acceptance tests can come in different levels of granularity. Most of the time t
 ### Exploratory Testing
 Even the most diligent test automation efforts are not perfect. Sometimes you miss certain edge cases in your automated tests. Sometimes it's nearly impossible to detect a particular bug by writing a unit test. Certain quality issues don't even become apparent within your automated tests (think about design or usability). Despite your best intentions with regards to test automation, manual testing of some sorts is still a good idea.
 
-!/assets/img/uploads/exploratoryTesting.png[exploratory testing]
+image::exploratoryTesting.png[exploratory testing]
 _Use exploratory testing to spot all quality issues that your build pipeline didn't spot_
 
 Include https://en.wikipedia.org/wiki/Exploratory_testing[Exploratory Testing] in your testing portfolio. It is a manual testing approach that emphasizes the tester's freedom and creativity to spot quality issues in a running system. Simply take some time on a regular schedule, roll up your sleeves and try to break your application. Use a destructive mindset and come up with ways to provoke issues and errors in your application. Document everything you find for later. Watch out for bugs, design issues, slow response times, missing or misleading error messages and everything else that would annoy you as a user of your software.
@@ -367,7 +367,7 @@ The application's functionality is simple. It provides a REST interface with thr
 === High-level Structure
 On a high-level the system has the following structure:
 
-!/assets/img/uploads/testService.png[sample application structure]
+image::testService.png[sample application structure]
 _the high level structure of our microservice system_
 
 Our microservice provides a REST interface that can be called via HTTP. For some endpoints the service will fetch information from a database. In other cases the service will call an external https://darksky.net[weather API] via HTTP to fetch and display current weather conditions.
@@ -375,7 +375,7 @@ Our microservice provides a REST interface that can be called via HTTP. For some
 === Internal Architecture
 Internally, the Spring Service has a Spring-typical architecture:
 
-!/assets/img/uploads/testArchitecture.png[sample application architecture]
+image::testArchitecture.png[sample application architecture]
 _the internal structure of our microservice_
 
   * `Controller` classes provide _REST_ endpoints and deal with _HTTP_ requests and responses
