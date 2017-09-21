@@ -9,6 +9,7 @@ v1.0, 2017-09-18
 :source-highlighter: pygments
 :numbered:
 
+= Learning the Foundations
 Microservices have been all the rage for a while. If you attended any tech conference or read software engineering blogs lately, you'll either be amazed or fed up with all the stories that companies love to share about their microservices journey.
 
 Behind all the hype are some true advantages to adopting a microservice architecture. And of course -- as with every architecture decision -- there will be trade-offs. I won't give you a lecture about the benefits and drawbacks of microservices or whether you should use them. Others have done https://www.martinfowler.com/microservices[a way better job] at breaking this down than I could. Chance is, if you're reading this you somehow ended up with the decision to take a look into microservices and what it means to test them.
