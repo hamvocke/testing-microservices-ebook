@@ -1,5 +1,5 @@
 = Testing Microservices
-Hermann Vocke <hermann.vocke@gmail.com>
+Ham Vocke
 v1.0, 2017-09-28
 :imagesdir: img
 :homepage: http://www.hamvocke.com/blog/testing-microservices
