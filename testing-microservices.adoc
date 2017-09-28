@@ -1,6 +1,6 @@
 = Testing Microservices
 Hermann Vocke <hermann.vocke@gmail.com>
-v1.0, 2017-09-18
+v1.0, 2017-09-28
 :imagesdir: img
 :homepage: http://www.hamvocke.com/blog/testing-microservices
 :toc:
@@ -44,8 +44,8 @@ Microservices go hand in hand with **continuous delivery**, a practice where you
 
 Once you advance on your microservices quest you'll be juggling dozens, maybe even hundreds of microservices. At this point building, testing and deploying these services manually becomes impossible -- unless you want to spend all your time with manual, repetitive work instead of delivering working software. Automating everything -- from build to tests, deployment and infrastructure -- is your only way forward.
 
+.Use build pipelines to automatically and reliably get your software into production
 image::buildPipeline.png[build pipeline]
-*Use build pipelines to automatically and reliably get your software into production*
 
 Most microservices success stories are told by teams who use continuous delivery or **continuous deployment** (every software change that's proven to be releasable will be deployed to production). These teams make sure that changes get into the hands of their customers quickly.
 
@@ -57,13 +57,14 @@ Luckily there's a remedy for repetitive tasks: **automation**.
 
 Automating your tests can be a big game changer in your life as a software developer. Automate your tests and you no longer have to mindlessly follow click protocols in order to check if your software still works correctly. Automate your tests and you can change your codebase without batting an eye. If you've ever tried doing a large-scale refactoring without a proper test suite I bet you know what a terrifying experience this can be. How would you know if you accidentally broke stuff along the way? Well, you click through all your manual test cases, that's how. But let's be honest: do you really enjoy that? How about making even large-scale changes and knowing whether you broke stuff within seconds while taking a nice sip of coffee? Sounds more enjoyable if you ask me.
 
-Automation in general and test automation specifically are essential to building a successful microservices architecture. Do yourself a favor and take a look at the concepts behind continuous delivery (https://www.amazon.com/gp/product/0321601912) is my go to resource[the Continuous Delivery book]. You will see that diligent automation allows you to deliver software faster and more reliable. Continuous delivery paves the way into a new world full of fast feedback and experimentation. At the very least it makes your life as a developer more peaceful.
+Automation in general and test automation specifically are essential to building a successful microservices architecture. Do yourself a favor and take a look at the concepts behind continuous delivery (the https://www.amazon.com/gp/product/0321601912[Continuous Delivery book] is my go to resource). You will see that diligent automation allows you to deliver software faster and more reliable. Continuous delivery paves the way into a new world full of fast feedback and experimentation. At the very least it makes your life as a developer more peaceful.
 
 ## The Test Pyramid
 If you want to get serious about automated tests for your software there is one key concept that you should know about: the **test pyramid**. Mike Cohn came up with this concept in his book https://www.amazon.com/dp/0321579364/ref=cm_sw_r_cp_dp_T2_bbyqzbMSHAG05[Succeeding with Agile]. It's a great visual metaphor telling you to think about different layers of testing. It also tells you how much testing to do on each layer.
 
+.The test pyramid
 image::testPyramid.png[Test Pyramid]
-_The test pyramid_
+
 
 Mike Cohn's original test pyramid consists of three layers that your test suite should consist of (bottom to top):
 
@@ -90,8 +91,8 @@ While the test pyramid suggests that you'll have three different types of tests 
 ### Unit tests
 The foundation of your test suite will be made up of unit tests. Your unit tests make sure that a certain unit (your _subject under test_) of your codebase works as intended. The number of unit tests in your test suite will largely outnumber any other type of test.
 
+.A unit test typically replaces external collaborators with mocks or stubs
 image::unitTest.png[unit tests]
-*A unit test typically replaces external collaborators with mocks or stubs*
 
 #### What's a Unit?
 If you ask three different people what _"unit"_ means in the context of unit tests, you'll probably receive four different, slightly nuanced answers. To a certain extend it's a matter of your own definition and it's okay to have no canonical answer.
@@ -101,12 +102,12 @@ If you're working in a functional language a _unit_ will most likely be a single
 #### Sociable and Solitary
 Some argue that all collaborators (e.g. other classes that are called by your class under test) of your subject under test should be substituted with _mocks_ or _stubs_ to come up with perfect isolation and to avoid side-effects and complicated test setup. Others argue that only collaborators that are slow or have bigger side effects (e.g. classes that access databases or make network calls) should be stubbed or mocked.
 
-https://martinfowler.com/articles/mocksArentStubs.html[Occasionally](https://www.martinfowler.com/bliki/UnitTest.html) people label these two sorts of tests as **solitary unit tests** for tests that stub all collaborators and **sociable unit tests** for tests that allow talking to real collaborators (Jay Fields' [Working Effectively with Unit Tests](https://leanpub.com/wewut) coined these terms). If you have some spare time you can go down the rabbit hole and [read more about the pros and cons] of the different schools of thought.
+https://www.martinfowler.com/bliki/UnitTest.html[Occasionally] people label these two sorts of tests as **solitary unit tests** for tests that stub all collaborators and **sociable unit tests** for tests that allow talking to real collaborators (Jay Fields' https://leanpub.com/wewut[Working Effectively with Unit Tests] coined these terms). If you have some spare time you can go down the rabbit hole and https://martinfowler.com/articles/mocksArentStubs.html[read more about the pros and cons] of the different schools of thought.
 
 At the end of the day it's not important to decide if you go for solitary or sociable unit tests. Writing automated tests is what's important. Personally, I find myself using both approaches all the time. If it becomes awkward to use real collaborators I will use mocks and stubs generously. If I feel like involving the real collaborator gives me more confidence in a test I'll only stub the outermost parts of my service.
 
 #### Mocking and Stubbing
-**Mocking** and **stubbing** (https://martinfowler.com/articles/mocksArentStubs.html) if you want to be precise[there's a difference] should be heavily used instruments in your unit tests.
+**Mocking** and **stubbing** (https://martinfowler.com/articles/mocksArentStubs.html[there's a difference] if you want to be precise) should be heavily used instruments in your unit tests.
 
 In plain words it means that you replace a real thing (e.g. a class, module or function) with a fake version of that thing. The fake version looks and acts like the real thing (answers to the same method calls) but answers with canned responses that you define yourself at the beginning of your unit test.
 
@@ -129,8 +130,8 @@ All non-trivial applications will integrate with some other parts (databases, fi
 
 Integration tests live at the boundary of your service. Conceptually they're always about triggerng an action that leads to integrating with the outside part (filesystem, database, etc). A database integration test would probably look like this:
 
+.A database integration test integrates your code with a real database
 image::dbIntegrationTest.png[a database integration test]
-*A database integration test integrates your code with a real database*
 
     1. start a database
     2. connect your application to the database
@@ -140,8 +141,8 @@ image::dbIntegrationTest.png[a database integration test]
 
 Another example, an integration test for your REST API could look like this:
 
+.An HTTP integration test checks that real HTTP calls hit your code correctly
 image::httpIntegrationTest.png[an HTTP integration test]
-*An HTTP integration test checks that real HTTP calls hit your code correctly*
 
     1. start your application
     2. fire an HTTP request against one of your REST endpoints
@@ -162,7 +163,7 @@ Writing integration tests around these boundaries ensures that writing data to a
 
 If possible you should prefer to run your external dependencies locally: spin up a local MySQL database, test against a local ext4 filesystem. In some cases this won't be easy. If you're integrating with third-party systems from another vendor you might not have the option to run an instance of that service locally (though you should try; talk to your vendor and try to find a way).
 
-If there's no way to run a third-party service locally you should opt for running a dedicated test instance somewhere and point at this test instance when running your integration tests. Avoid integrating with the real production system in your automated tests. Blasting thousands of test requests against a production system is a surefire way to get people angry because you're cluttering their logs (in the best case) or even <abbr title="Denial of Service">DoS</abbr>'ing their service (in the worst case).
+If there's no way to run a third-party service locally you should opt for running a dedicated test instance somewhere and point at this test instance when running your integration tests. Avoid integrating with the real production system in your automated tests. Blasting thousands of test requests against a production system is a surefire way to get people angry because you're cluttering their logs (in the best case) or even DoS'ing their service (in the worst case).
 
 With regards to the test pyramid, integration tests are on a higher level than your unit tests. Integrating slow parts like filesystems and databases tends to be much slower than running unit tests with these parts stubbed out. They can also be harder to write than small and isolated unit tests, after all you have to take care of spinning up an external part as part of your tests. Still, they have the advantage of giving you the confidence that your application can correctly work with all the external parts it needs to talk to. Unit tests can't help you with that.
 
@@ -171,6 +172,7 @@ Most applications have some sort of user interface. Typically we're talking abou
 
 _UI tests_ test that the user interface of your application works correctly. User input should trigger the right actions, data should be presented to the user, the UI state should change as expected.
 
+.User Interface Tests
 image::ui_tests.png[user interface tests]
 
 UI Tests and end-to-end tests are sometimes (as in Mark Cohn's case) said to be the same thing. For me this conflates two things that are not _necessarily_ related.
@@ -183,7 +185,7 @@ With traditional web applications testing the user interface can be achieved wit
 
 With web interfaces there's multiple aspects that you probably want to test around your UI: behaviour, layout, usability or adherence to your corporate design are only a few.
 
-Fortunally, testing the **behaviour** of your user interface is pretty simple. You click here, enter data there and want the state of the user interface to change accordingly. Modern single page application frameworks (http://mochajs.org/[react](https://facebook.github.io/react/), [vue.js](https://vuejs.org/), [Angular](https://angular.io/) and the like) often come with their own tools and helpers that allow you to thorougly test these interactions in a pretty low-level (unit test) fashion. Even if you roll your own frontend implementation using vanilla javascript you can use your regular testing tools like [Jasmine](https://jasmine.github.io/) or [Mocha]. With a more traditional, server-side rendered application, Selenium-based tests will be your best choice.
+Fortunally, testing the **behaviour** of your user interface is pretty simple. You click here, enter data there and want the state of the user interface to change accordingly. Modern single page application frameworks (https://facebook.github.io/react/[react], https://vuejs.org/[vue.js], https://angular.io/[Angular] and the like) often come with their own tools and helpers that allow you to thorougly test these interactions in a pretty low-level (unit test) fashion. Even if you roll your own frontend implementation using vanilla javascript you can use your regular testing tools like https://jasmine.github.io/[Jasmine] or http://mochajs.org/[Mocha]. With a more traditional, server-side rendered application, Selenium-based tests will be your best choice.
 
 Testing that your web application's **layout** remains intact is a little harder. Depending on your application and your users' needs you may want to make sure that code changes don't break the website's layout by accident.
 
@@ -191,9 +193,9 @@ The problem is that computers are notoriously bad at checking if something "look
 
 There are some tools to try if you want to automatically check your web application's design in your build pipeline. Most of these tools utilize Selenium to open your web application in different browsers and formats, take screenshots and compare these to previously taken screenshots. If the old and new screenshots differ in an unexpected way, the tool will let you know.
 
-https://github.com/otto-de/jlineup[Galen](http://galenframework.com/) is one of these tools. But even rolling your own solution isn't too hard if you have special requirements. Some teams I've worked with built [lineup](https://github.com/otto-de/lineup) and its Java-based cousin [jlineup] to achieve something similar. Both tools take the same Selenium-based approach I described before.
+http://galenframework.com/[Galen] is one of these tools. But even rolling your own solution isn't too hard if you have special requirements. Some teams I've worked with built https://github.com/otto-de/lineup[lineup] and its Java-based cousin https://github.com/otto-de/jlineup[jlineup] to achieve something similar. Both tools take the same Selenium-based approach I described before.
 
-Once you want to test for **usability** and a "looks good" factor you leave the realms of automated testing. This is the area where you should rely on https://en.wikipedia.org/wiki/Usability_testing#Hallway_testing)[exploratory testing](https://en.wikipedia.org/wiki/Exploratory_testing), usability testing (this can even be as simple as [hallway testing] and showcases with your users to see if they like using your product and can use all features without getting frustrated or annoyed.
+Once you want to test for **usability** and a "looks good" factor you leave the realms of automated testing. This is the area where you should rely on https://en.wikipedia.org/wiki/Exploratory_testing[exploratory testing], usability testing (this can even be as simple as https://en.wikipedia.org/wiki/Usability_testing#Hallway_testing[hallway testing] and showcases with your users to see if they like using your product and can use all features without getting frustrated or annoyed.
 
 ### Contract Tests
 One of the big benefits of a microservice architecture is that it allows your organisation to scale their development efforts quite easily. You can spread the development of microservices across different teams and develop a big system consisting of multiple loosely coupled services without stepping on each others toes.
@@ -203,13 +205,13 @@ Splitting your system into many small services often means that these services n
 Interfaces between microservices can come in different shapes and technologies. Common ones are
 
   * REST and JSON via HTTPS
-  * <abbr title="remote procedure calls">RPC</abbr> using something like https://grpc.io/[gRPC]
+  * Remote Procedure Calls using something like https://grpc.io/[gRPC]
   * building an event-driven architecture using queues
 
 For each interface there are two parties involved: the **provider** and the **consumer**. The provider serves data to consumers. The consumer processes data obtained from a provider. In a REST world a provider builds a REST API with all required endpoints; a consumer makes calls to this REST API to fetch data or trigger changes in the other service. In an asynchronous, event-driven world, a provider (often rather called **publisher**) publishes data to a queue; a consumer (often called **subscriber**) subscribes to these queues and reads and processes data.
 
+.Each interface has a providing (or publishing) and a consuming (or subscribing) party. The specification of an interface can be considered a contract.
 image::contract_tests.png[contract tests]
-_Each interface has a providing (or publishing) and a consuming (or subscribing) party. The specification of an interface can be considered a contract._
 
 As you often spread the consuming and providing services across different teams you find yourself in the situation where you have to clearly specify the interface between these services (the so called **contract**). Traditionally companies have approached this problem in the following way:
 
@@ -226,10 +228,10 @@ In a more agile organisation you should take the more efficient and less wastefu
 
 **Consumer-Driven Contract tests** (**CDC tests**) let the consumers drive the implementation of a contract. Using CDC, consumers of an interface write tests that check the interface for all data they need from that interface. The consuming team then publishes these tests so that the publishing team can fetch and execute these tests easily. The providing team can now develop their API by running the CDC tests. Once all tests pass they know they have implemented everything the consuming team needs.
 
+.Contract tests ensure that the provider and all consumers of an interface stick to the defined interface contract. With CDC tests consumers of an interface publish their requirements in the form of automated tests; the providers fetch and execute these tests continuously
 image::cdc_tests.png[CDC tests]
-_Contract tests ensure that the provider and all consumers of an interface stick to the defined interface contract. With CDC tests consumers of an interface publish their requirements in the form of automated tests; the providers fetch and execute these tests continuously_
 
-This approach allows the providing team to implement only what's really necessary (keeping things simple, <abbr title="You ain't gonna need it">YAGNI</abbr> and all that). The team providing the interface should fetch and run these CDC tests continuously (in their build pipeline) to spot any breaking changes immediately. If they break the interface their CDC tests will fail, preventing breaking changes to go live. As long as the tests stay green the team can make any changes they like without having to worry about other teams.
+This approach allows the providing team to implement only what's really necessary (keeping things simple, YAGNI and all that). The team providing the interface should fetch and run these CDC tests continuously (in their build pipeline) to spot any breaking changes immediately. If they break the interface their CDC tests will fail, preventing breaking changes to go live. As long as the tests stay green the team can make any changes they like without having to worry about other teams.
 
 The Consumer-Driven Contract approach would leave you with a process looking like this:
 
@@ -240,23 +242,24 @@ The Consumer-Driven Contract approach would leave you with a process looking lik
 
 If your organisation adopts microservices, having CDC tests is a big step towards establishing autonomous teams. CDC tests are an automated way to foster team communication. They ensure that interfaces between teams are working at any time. Failing CDC tests are a good indicator that you should walk over to the affected team, have a chat about any upcoming API changes and figure out how you want to move forward.
 
-A naive implementation of CDC tests can be as simple as firing requests against an API and assert that the responses contain everything you need. You then package these tests as an executable (.gem, .jar, .sh) and upload it somewhere the other team can fetch it (e.g. an artifact repository like https://www.jfrog.com/artifactory/)[Artifactory].
+A naive implementation of CDC tests can be as simple as firing requests against an API and assert that the responses contain everything you need. You then package these tests as an executable (.gem, .jar, .sh) and upload it somewhere the other team can fetch it (e.g. an artifact repository like https://www.jfrog.com/artifactory/)[Artifactory]).
 
 Over the last couple of years the CDC approach has become more and more popular and several tools been build to make writing and exchanging them easier.
 
 https://github.com/realestate-com-au/pact[Pact] is probably the most prominent one these days. It has a sophisticated approach of writing tests for the consumer and the provider side, gives you stubs for third-party services out of the box and allows you to exchange CDC tests with other teams. Pact has been ported to a lot of platforms and can be used with JVM languages, Ruby, .NET, JavaScript and many more.
 
-If you want to get started with CDCs and don't know how, Pact can be a sane choice. The /blog/testing-java-microservices/[documentation](https://docs.pact.io/) can be overwhelming at first. Be patient and work through it. It helps to get a firm understanding for CDCs which in turn makes it easier for you to advocate for the use of CDCs when working with other teams. You can also find a hands-on example in the [second part of this series].
+If you want to get started with CDCs and don't know how, Pact can be a sane choice. The https://docs.pact.io/[documentation] can be overwhelming at first. Be patient and work through it. It helps to get a firm understanding for CDCs which in turn makes it easier for you to advocate for the use of CDCs when working with other teams. You can also find a hands-on example in the <<second-part,second part>>.
 
 Consumer-Driven Contract tests can be a real game changer as you venture further on your microservices journey. Do yourself a favor, read up on that concept and give it a try. A solid suite of CDC tests is invaluable for being able to move fast without breaking other services and cause a lot of frustration with other teams.
 
 ### End-to-End Tests
 Testing your deployed application via its user interface is the most end-to-end way you could test your application. The previously described, webdriver driven UI tests are a good example of end-to-end tests.
 
+.End-to-end tests test your entire, completely integrated system
 image::e2etests.png[an end-to-end test]
-_End-to-end tests test your entire, completely integrated system_
 
-End-to-end tests give you the biggest confidence when you need to decide if your software is working or not. http://nightwatchjs.org/[Selenium](http://docs.seleniumhq.org/) and the [WebDriver Protocol](https://www.w3.org/TR/webdriver/) allow you to automate your tests by automatically driving a (headless) browser against your deployed services, performing clicks, entering data and checking the state of your user interface. You can use Selenium directly or use tools that are build on top of it, [Nightwatch] being one of them.
+
+End-to-end tests give you the biggest confidence when you need to decide if your software is working or not. http://docs.seleniumhq.org/[Selenium] and the https://www.w3.org/TR/webdriver/[WebDriver Protocol] allow you to automate your tests by automatically driving a (headless) browser against your deployed services, performing clicks, entering data and checking the state of your user interface. You can use Selenium directly or use tools that are build on top of it, http://nightwatchjs.org/[Nightwatch] being one of them.
 
 End-to-End tests come with their own kind of problems. They are notoriously flaky and often fail for unexpected and unforseeable reasons. Quite often their failure is a false positive. The more sophisticated your user interface, the more flaky the tests tend to become. Browser quirks, timing issues, animations and unexpected popup dialogs are only some of the reasons that got me spending more of my time with debugging than I'd like to admit.
 
@@ -277,25 +280,35 @@ Remember: you have lots of lower levels in your test pyramid where you already t
 ### Acceptance Tests -- Do Your Features Work Correctly?
 The higher you move up in your test pyramid the more likely you enter the realms of testing whether the features you're building work correctly from a user's perspective. You can treat your application as a black box and shift  the focus in your tests from
 
-> when I enter the values `x` and `y`, the return value should be `z`
+====
+when I enter the values `x` and `y`, the return value should be `z`
+====
 
 towards
 
-> _given_ there's a logged in user
-> _and_ there's an article "bicycle"
-> _when_ the user navigates to the "bicycle" article's detail page
-> _and_ clicks the "add to basket" button
-> _then_ the article "bicycle" should be in their shopping basket
+====
+_given_ there's a logged in user
 
-Sometimes you'll hear the terms https://en.wikipedia.org/wiki/Acceptance_testing#Acceptance_testing_in_extreme_programming[**functional test**](https://en.wikipedia.org/wiki/Functional_testing) or [**acceptance test**] for these kinds of tests. Sometimes people will tell you that functional and acceptance tests are different things. Sometimes the terms are conflated. Sometimes people will argue endlessly about wording and definitions. Often this discussion is a pretty big source of confusion.
+_and_ there's an article "bicycle"
+
+_when_ the user navigates to the "bicycle" article's detail page
+
+_and_ clicks the "add to basket" button
+
+_then_ the article "bicycle" should be in their shopping basket
+====
+
+Sometimes you'll hear the terms https://en.wikipedia.org/wiki/Functional_testing[**functional test**] or https://en.wikipedia.org/wiki/Acceptance_testing#Acceptance_testing_in_extreme_programming[**acceptance test**] for these kinds of tests. Sometimes people will tell you that functional and acceptance tests are different things. Sometimes the terms are conflated. Sometimes people will argue endlessly about wording and definitions. Often this discussion is a pretty big source of confusion.
 
 Here's the thing: At one point you should make sure to test that your software works correctly from a _user's_ perspective, not just from a technical perspective. What you call these tests is really not that important. Having these tests, however, is. Pick a term, stick to it, and write those tests.
 
-This is also the moment where people talk about <abbr title="Behaviour-Driven Development">BDD</abbr> and tools that allow you to implement tests in a BDD fashion. BDD or a BDD-style way of wrtiting tests can be a nice trick to shift your mindset from implementation details towards the users' needs. Go ahead and give it a try.
+This is also the moment where people talk about Behaviour-Driven Development (BDD) and tools that allow you to implement tests in a BDD fashion. BDD or a BDD-style way of wrtiting tests can be a nice trick to shift your mindset from implementation details towards the users' needs. Go ahead and give it a try.
 
-You don't even need to adopt full-blown BDD tools like http://chaijs.com/guide/styles/#should[Cucumber](https://cucumber.io/) (though you can). Some assertion libraries (like [chai.js] allow you to write assertions with `should`-style keywords that can make your tests read more BDD-like. And even if you don't use a library that provides this notation, clever and well-factored code will allow you to write user behaviour focused tests. Some helper methods/functions can get you a very long way:
+You don't even need to adopt full-blown BDD tools like https://cucumber.io/[Cucumber] (though you can). Some assertion libraries (like http://chaijs.com/guide/styles/#should[chai.js] allow you to write assertions with `should`-style keywords that can make your tests read more BDD-like. And even if you don't use a library that provides this notation, clever and well-factored code will allow you to write user behaviour focused tests. Some helper methods/functions can get you a very long way:
 
-{% highlight python %}
+.A sample acceptance test
+[source,python]
+----
 def test_add_to_basket():
     # given
     user = a_user_with_empty_basket()
@@ -307,15 +320,15 @@ def test_add_to_basket():
 
     # then
     assert user.basket.contains(bicycle)
-{% endhighlight %}
+----
 
 Acceptance tests can come in different levels of granularity. Most of the time they will be rather high-level and test your service through the user interface. However, it's good to understand that there's technically no need to write acceptance tests at the highest level of your test pyramid. If your application design and your scenario at hand permits that you write an acceptance test at a lower level, go for it. Having a low-level test is better than having a high-level test. The concept of acceptance tests -- proving that your features work correctly for the user -- is completely orthogonal to your test pyramid.
 
 ### Exploratory Testing
 Even the most diligent test automation efforts are not perfect. Sometimes you miss certain edge cases in your automated tests. Sometimes it's nearly impossible to detect a particular bug by writing a unit test. Certain quality issues don't even become apparent within your automated tests (think about design or usability). Despite your best intentions with regards to test automation, manual testing of some sorts is still a good idea.
 
+.Use exploratory testing to spot all quality issues that your build pipeline didn't spot
 image::exploratoryTesting.png[exploratory testing]
-_Use exploratory testing to spot all quality issues that your build pipeline didn't spot_
 
 Include https://en.wikipedia.org/wiki/Exploratory_testing[Exploratory Testing] in your testing portfolio. It is a manual testing approach that emphasizes the tester's freedom and creativity to spot quality issues in a running system. Simply take some time on a regular schedule, roll up your sleeves and try to break your application. Use a destructive mindset and come up with ways to provoke issues and errors in your application. Document everything you find for later. Watch out for bugs, design issues, slow response times, missing or misleading error messages and everything else that would annoy you as a user of your software.
 
@@ -334,7 +347,7 @@ Duplicating tests can be quite tempting, especially when you're new to test auto
 
 
 [#second-part]
-= Getting Hands on in Java & Spring Boot
+= Getting Hands on with Java & Spring Boot
 The first part was a round-trip of what it means to test microservices. We looked at the test pyramid and found out that you should write different types of automated tests to come up with a reliable and effective test suite.
 
 While the first part was more abstract this part will be more hands on and include code, lots of code. We will explore how we can implement the concepts discussed before. The technology of choice for this part will be **Java** with **Spring Boot** as the application framework. Most of the tools and libraries outlined here work for Java in general and don't require you to use Spring Boot at all. A few of them are test helpers specific to Spring Boot. Even if you don't use Spring Boot for your application there will be a lot to learn for you.
@@ -367,16 +380,16 @@ The application's functionality is simple. It provides a REST interface with thr
 === High-level Structure
 On a high-level the system has the following structure:
 
+.the high level structure of our microservice system
 image::testService.png[sample application structure]
-_the high level structure of our microservice system_
 
 Our microservice provides a REST interface that can be called via HTTP. For some endpoints the service will fetch information from a database. In other cases the service will call an external https://darksky.net[weather API] via HTTP to fetch and display current weather conditions.
 
 === Internal Architecture
 Internally, the Spring Service has a Spring-typical architecture:
 
+.the internal structure of our microservice
 image::testArchitecture.png[sample application architecture]
-_the internal structure of our microservice_
 
   * `Controller` classes provide _REST_ endpoints and deal with _HTTP_ requests and responses
   * `Repository` classes interface with the _database_ and take care of writing and reading data to/from persistent storage
@@ -385,7 +398,7 @@ _the internal structure of our microservice_
 
 Experienced Spring developers might notice that a frequently used layer is missing here: Inspired by https://en.wikipedia.org/wiki/Anemic_domain_model)https://en.wikipedia.org/wiki/Domain-driven_design[Domain-Driven Design] a lot of developers build a **service layer** consisting of _service_ classes. I decided not to include a service layer in this application. One reason is that our application is simple enough, a service layer would have been an unnecessary level of indirection. The other one is that I think people overdo it with service layers. I often encounter codebases where the entire business logic is captured within service classes. The domain model becomes merely a layer for data, not for behaviour (Martin Fowler calls this an [Aenemic Domain Model]. For every non-trivial application this wastes a lot of potential to keep your code well-structured and testable and does not fully utilize the power of object orientation.
 
-Our repositories are straightforward and provide simple <abbr title="Create Read Update Delete">CRUD</abbr> functionality. To keep the code simple I used http://projects.spring.io/spring-data/[Spring Data]. Spring Data gives us a simple and generic CRUD repository implementation that we can use instead of rolling our own. It also takes care of spinning up an in-memory database for our tests instead of using a real PostgreSQL database as it would in production.
+Our repositories are straightforward and provide simple Create, Read, Update, Delete (CRUD) functionality. To keep the code simple I used http://projects.spring.io/spring-data/[Spring Data]. Spring Data gives us a simple and generic CRUD repository implementation that we can use instead of rolling our own. It also takes care of spinning up an in-memory database for our tests instead of using a real PostgreSQL database as it would in production.
 
 Take a look at the codebase and make yourself familiar with the internal structure. It will be useful for our next step: Testing the application!
 
@@ -407,15 +420,19 @@ This way you lose one big benefit of unit tests: acting as a safety net for code
 
 What do you do instead? Don't reflect your internal code structure within your unit tests. Test for observable behavior instead. Think about
 
-> _"if I enter values `x` and `y`, will the result be `z`?"_
+====
+if I enter values `x` and `y`, will the result be `z`?
+====
 
 instead of
 
-> _"if I enter `x` and `y`, will the method call class A first, then call class B and then return the result of class A plus the result of class B?"_
+====
+if I enter `x` and `y`, will the method call class A first, then call class B and then return the result of class A plus the result of class B?
+====
 
 Private methods should generally be considered an implementation detail that's why you shouldn't even have the urge to test them.
 
-I often hear opponents of unit testing (or <abbr title="Test-Driven Development">TDD</abbr>) arguing that writing unit tests becomes pointless work where you have to test all your methods in order to come up with a high test coverage. They often cite scenarios where an overly eager team lead forced them to write unit tests for getters and setters and all other sorts of trivial code in order to come up with 100% test coverage.
+I often hear opponents of unit testing (or Test-Driven Development (TDD)) arguing that writing unit tests becomes pointless work where you have to test all your methods in order to come up with a high test coverage. They often cite scenarios where an overly eager team lead forced them to write unit tests for getters and setters and all other sorts of trivial code in order to come up with 100% test coverage.
 
 There's so much wrong with that.
 
@@ -513,7 +530,7 @@ public class ExampleControllerTest {
 }
 ----
 
-We're writing the unit tests using http://site.mockito.org/http://junit.org[JUnit], the de-facto standard testing framework for Java. We use [Mockito] to replace the real `PersonRepository` class with a stub for our test. This stub allows us to define canned responses the stubbed method should return in this test. Stubbing makes our test more simple, predictable and allows us to easily setup test data.
+We're writing the unit tests using http://junit.org[JUnit], the de-facto standard testing framework for Java. We use http://site.mockito.org/[Mockito] to replace the real `PersonRepository` class with a stub for our test. This stub allows us to define canned responses the stubbed method should return in this test. Stubbing makes our test more simple, predictable and allows us to easily setup test data.
 
 Following the _arrange, act, assert_ structure, we write two unit tests -- a positive case and a case where the searched person cannot be found. The first, positive test case creates a new person object and tells the mocked repository to return this object when it's called with _"Pan"_ as the value for the `lastName` parameter. The test then goes on to call the method that should be tested. Finally it asserts that the response is equal to the expected response.
 
@@ -525,10 +542,10 @@ Integration tests are the next higher level in your test pyramid. They test that
 === What to Test?
 A good way to think about where you should have integration tests is to think about all places where data gets serialized or deserialized. Common ones are:
 
-  * reading HTTP requests and sending HTTP responses through your REST API
-  * reading and writing from/to a database
-  * reading and writing from/to a filesystem
-  * sending HTTP(S) requests to other services and parsing their responses
+. reading HTTP requests and sending HTTP responses through your REST API
+. reading and writing from/to a database
+. reading and writing from/to a filesystem
+. sending HTTP(S) requests to other services and parsing their responses
 
 In the sample codebase you can find integration tests for `Repository`, `Controller` and `Client` classes. All these classes interface with the sorroundings of the application (databases or the network) and serialize and deserialize data. We can't test these integrations with unit tests.
 
@@ -695,7 +712,9 @@ Next we call the method we want to test, the one that calls the third-party serv
 
 It's important to understand how the test knows that it should call the fake Wiremock server instead of the real _darksky_ API. The secret is in our `application.properties` file contained in `src/test/resources`. This is the properties file Spring loads when running tests. In this file we override configuration like API keys and URLs with values that are suitable for our testing purposes, e.g. calling the the fake Wiremock server instead of the real one:
 
- weather.url = http://localhost:8089
+----
+weather.url = http://localhost:8089
+----
 
 Note that the port defined here has to be the same we define when instanciating the `WireMockRule` in our test. Replacing the real weather API's URL with a fake one in our tests is made possible by injecting the URL in our `WeatherClient` class' constructor:
 
@@ -715,7 +734,7 @@ public WeatherClient(final RestTemplate restTemplate,
 This way we tell our `WeatherClient` to read the `weatherUrl` parameter's value from the `weather.url` property we define in our application properties.
 
 === Parsing and Writing JSON
-Writing a REST API these days you often pick JSON when it comes to sending your data over the wire. Using Spring there's no need to writing JSON by hand nor to write logic that transforms your objects into JSON (although you can do both if you feel like reinventing the wheel). Defining <abbr title="Plain Old Java Object">POJOs</abbr> that represent the JSON structure you want to parse from a request or send with a response is enough.
+Writing a REST API these days you often pick JSON when it comes to sending your data over the wire. Using Spring there's no need to writing JSON by hand nor to write logic that transforms your objects into JSON (although you can do both if you feel like reinventing the wheel). Defining POJOs that represent the JSON structure you want to parse from a request or send with a response is enough.
 
 Spring and https://github.com/FasterXML/jackson[Jackson] take care of everything else. With the help of Jackson, Spring automagically parses JSON into Java objects and vice versa. If you have good reasons you can use any other JSON mapper out there in your codebase. The advantage of Jackson is that it comes bundled with Spring Boot.
 
@@ -852,21 +871,21 @@ public class WeatherProviderTest {
 
 You see that all the provider test has to do is to load a pact file (e.g. by using the `@PactFolder` annotation to load previously downloaded pact files) and then define how test data for pre-defined states should be provided (e.g. using Mockito mocks). There's no custom test to be implemented. These are all derived from the pact file. It's important that the provider test has matching counterparts to the _provider name_ and _state_ declared in the consumer test.
 
-I know that this whole CDC thing can be confusing as hell when you get started. Believe me when I say it's worth taking your time to understand it. If you need a more thorough example, go and check out the https://twitter.com/lplotnihttps://github.com/lplotni/pact-example[fantastic example] my friend [Lukasz] has written. This repo demonstrates how to write consumer and provider tests using pact. It even features both Java and JavaScript services so that you can see how easy it is to use this approach with different programming languages.
+I know that this whole CDC thing can be confusing as hell when you get started. Believe me when I say it's worth taking your time to understand it. If you need a more thorough example, go and check out the https://github.com/lplotni/pact-example[fantastic example] my friend https://twitter.com/lplotni[Lukasz] has written. This repo demonstrates how to write consumer and provider tests using pact. It even features both Java and JavaScript services so that you can see how easy it is to use this approach with different programming languages.
 
 == End-to-End Tests
 At last we arrived at top of our test pyramid (phew, almost there!). Time to write end-to-end tests that calls our service via the user interface and does a round-trip through the complete system.
 
 === Using Selenium (testing via the UI)
-For end-to-end tests https://www.w3.org/TR/webdriver/http://docs.seleniumhq.org/[Selenium] and the [WebDriver] protocol are the tool of choice for many developers. With Selenium you can pick a browser you like and let it automatically call your website, click here and there, enter data and check that stuff changes in the user interface.
+For end-to-end tests http://docs.seleniumhq.org/[Selenium] and the https://www.w3.org/TR/webdriver/[WebDriver] protocol are the tool of choice for many developers. With Selenium you can pick a browser you like and let it automatically call your website, click here and there, enter data and check that stuff changes in the user interface.
 
-Selenium needs a browser that it can start and use for running its tests. There are multiple so-called _'drivers'_ for different browsers that you could use. https://www.mvnrepository.com/search?q=selenium+driver) (or multiple[Pick one] and add it to your `build.gradle`:
+Selenium needs a browser that it can start and use for running its tests. There are multiple so-called _'drivers'_ for different browsers that you could use. https://www.mvnrepository.com/search?q=selenium+driver[Pick one] (or multiple) and add it to your `build.gradle`:
 
  testCompile('org.seleniumhq.selenium:selenium-firefox-driver:3.5.3')
 
 Running a fully-fledged browser in your test suite can be a hassle. Especially when using continuous delivery the server running your pipeline might not be able to spin up a browser including a user interface (e.g. because there's no X-Server available). You can take a workaround for this problem by starting a virtual X-Server like https://en.wikipedia.org/wiki/Xvfb[xvfb].
 
-A more recent approach is to use a _headless_ browser (i.e. a browser that doesn't have a user interface) to run your webdriver tests. Until recently https://developer.mozilla.org/en-US/Firefox/Headless_mode) announced that they've implemented a headless mode in their browsers PhantomJS all of a sudden became obsolete. After all it's better to test your website with a browser that your users actually use (like Firefox and Chromehttps://developers.google.com/web/updates/2017/04/headless-chrome[PhantomJS](http://phantomjs.org/) was the leading headless browser used for browser automation. Ever since both [Chromium] and [Firefox] instead of using an artificial browser just because it's convenient for you as a developer.
+A more recent approach is to use a _headless_ browser (i.e. a browser that doesn't have a user interface) to run your webdriver tests. Until recently http://phantomjs.org/[PhantomJS] was the leading headless browser used for browser automation. Ever since both https://developers.google.com/web/updates/2017/04/headless-chrome[Chromium] and https://developer.mozilla.org/en-US/Firefox/Headless_mode[Firefox] announced that they've implemented a headless mode in their browsers PhantomJS all of a sudden became obsolete. After all it's better to test your website with a browser that your users actually use (like Firefox and Chrome) instead of using an artificial browser just because it's convenient for you as a developer.
 
 Both, headless Firefox and Chrome, are brand new and yet to be widely adopted for implementing webdriver tests. We want to keep things simple. Instead of fiddling around to use the bleeding edge headless modes let's stick to the classic way using Selenium and a regular browser. A simple end-to-end test that fires up Firefox, navigates to our service and checks the content of the website looks like this:
 
@@ -903,7 +922,7 @@ The test is straightforward. It spins up the entire Spring application on a rand
 === Using RestAssured (Testing via the REST API)
 I know, we already have tests in place that fire some sort of request against our REST API and check that the results are correct. Still, none of them is truly end to end. The MockMVC tests are "only" integration tests and don't send real HTTP requests against a fully running service.
 
-Let me show you one last tool that can come in handy when you write a service that provides a REST API. https://github.com/rest-assured/rest-assured) is a library that gives you a nice DSL for firing real HTTP requests against an API and checks the responses. It looks similar to MockMVC but is truly end-to-end (fun fact: there's even a REST-Assured MockMVC dialect[REST-assured]. If you think Selenium is overkill for your application as you don't really have a user interface that needs testing, REST-Assured is the way to go.
+Let me show you one last tool that can come in handy when you write a service that provides a REST API. https://github.com/rest-assured/rest-assured[REST-assured] is a library that gives you a nice DSL for firing real HTTP requests against an API and checks the responses. It looks similar to MockMVC but is truly end-to-end (fun fact: there's even a REST-Assured MockMVC dialect). If you think Selenium is overkill for your application as you don't really have a user interface that needs testing, REST-Assured is the way to go.
 
 First things first: Add the dependency to your `build.gradle`.
 
@@ -951,7 +970,7 @@ There we go, you made it through the entire testing pyramid. Congratulations! Be
   1. Test code is as important as production code. Give it the same level of care and attention. Never allow sloppy code to be justified with the _"this is only test code"_ claim
   2. Test one condition per test. This helps you to keep your tests short and easy to reason about
   3. _"arrange, act, assert"_ or _"given, when, then"_ are good mnemonics to keep your tests well-structured
-  4. Readability matters. Don't try to be overly <abbr title="Don't Repeat Yourself">DRY</abbr>. Duplication is okay, if it improves readability. Try to find a balance between https://stackoverflow.com/questions/6453235/what-does-damp-not-dry-mean-when-talking-about-unit-tests[DRY and <abbr title="Descriptive and Meaningful Phrases">DAMP</abbr>] code
+  4. Readability matters. Don't try to be overly DRY (_Don't Repeat Yourself_). Duplication is okay, if it improves readability. Try to find a balance between https://stackoverflow.com/questions/6453235/what-does-damp-not-dry-mean-when-talking-about-unit-tests[DRY and DAMP] code
   5. When in doubt use the https://blog.codinghorror.com/rule-of-three/[Rule of Three] to decide when to refactor. _Use before reuse_.
 
 Now it's your turn. Go ahead and make sure your microservices are properly tested. Your life will be more relaxed and your features will be written in almost no time. Promise!
@@ -959,15 +978,20 @@ Now it's your turn. Go ahead and make sure your microservices are properly teste
 
 ## Further reading
 
-  * ***Building Microservices*** **by Sam Newman**
-  This book contains so much more there is to know about building microservices. A lot of the ideas in this article can be found in this book as well. The chapter about testing is available as a free sample https://opds.oreilly.com/learning/building-microservices-testing[over at O'Reilly].
-  * ***Continuous Delivery*** **by Jez Humble and Dave Farley**
-  The canonical book on continuous delivery. Contains a lot of useful information about build pipelines, test and deployment automation and the cultural mindset around CD. This book has been a real eye opener in my career.
-  * ***https://leanpub.com/wewut[Working Effectively with Unit Tests]*** **by Jay Fields**
-  If you level up your unit testing skills or read more about mocking, stubbing, sociable and solitary unit tests, this is your resource.
-  * ***https://martinfowler.com/articles/microservice-testing[Testing Microservices]*** **by Toby Clemson**
-  A fantastic slide deck with a lot of useful information about the different considerations when testing a microservice. Has lots of nice diagrams to show what boundaries you should be looking at.
-  * ***Growing Object-Oriented Software Guided by Tests*** by **Steve Freeman and Nat Pryce**
-  If you're still trying to get your head around this whole testing thing (and ideally are working with Java) this is the single book you should be reading right now.
-  * ***Test-Driven Development: By example*** by **Kent Beck**
-  The classic TDD book by Kent Beck. Demonstrates on a hands-on walkthrough how you TDD your way to working software.
+***Building Microservices*** **by Sam Newman**::
+This book contains so much more there is to know about building microservices. A lot of the ideas in this article can be found in this book as well. The chapter about testing is available as a free sample https://opds.oreilly.com/learning/building-microservices-testing[over at O'Reilly].
+
+***Continuous Delivery*** **by Jez Humble and Dave Farley**::
+The canonical book on continuous delivery. Contains a lot of useful information about build pipelines, test and deployment automation and the cultural mindset around CD. This book has been a real eye opener in my career.
+
+***https://leanpub.com/wewut[Working Effectively with Unit Tests]*** **by Jay Fields**::
+If you level up your unit testing skills or read more about mocking, stubbing, sociable and solitary unit tests, this is your resource.
+
+***https://martinfowler.com/articles/microservice-testing[Testing Microservices]*** **by Toby Clemson**::
+A fantastic slide deck with a lot of useful information about the different considerations when testing a microservice. Has lots of nice diagrams to show what boundaries you should be looking at.
+
+***Growing Object-Oriented Software Guided by Tests*** by **Steve Freeman and Nat Pryce**::
+If you're still trying to get your head around this whole testing thing (and ideally are working with Java) this is the single book you should be reading right now.
+
+***Test-Driven Development: By example*** by **Kent Beck**::
+The classic TDD book by Kent Beck. Demonstrates on a hands-on walkthrough how you TDD your way to working software.
