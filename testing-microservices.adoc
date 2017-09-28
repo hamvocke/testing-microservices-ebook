@@ -6,7 +6,6 @@ v1.0, 2017-09-28
 :toc:
 :sectanchors:
 :source-highlighter: pygments
-:numbered:
 
 = Learning the Foundations
 Microservices have been all the rage for a while. If you attended any tech conference or read software engineering blogs lately, you'll either be amazed or fed up with all the stories that companies love to share about their microservices journey.
