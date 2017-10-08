@@ -453,7 +453,7 @@ A good structure for all your tests (this is not limited to unit tests) is this 
   2. Call your method under test
   3. Assert that the expected results are returned
 
-There's a nice mnemonic to remember this structure: http://wiki.c2.com/?ArrangeActAssert[_"Arrange, Act, Assert"_]. Another one that you can use takes inspiration from <abbr title="Behavior-Driven Development">BDD</abbr>. It's the _"given"_, _"when"_, _"then"_ triad, where _given_ reflects the setup, _when_ the method call and _then_ the assertion part.
+There's a nice mnemonic to remember this structure: http://wiki.c2.com/?ArrangeActAssert[_"Arrange, Act, Assert"_]. Another one that you can use takes inspiration from Behaviour-Driven Development. It's the _"given"_, _"when"_, _"then"_ triad, where _given_ reflects the setup, _when_ the method call and _then_ the assertion part.
 
 This pattern can be applied to other, more high-level tests as well. In every case they ensure that your tests remain easy and consistent to read. On top of that tests written with this structure in mind tend to be shorter and more expressive.
 
@@ -604,13 +604,13 @@ public class PersonRepositoryIntegrationTest {
 You can see that our integration test follows the same _arrange, act, assert_ structure as the unit tests. Told you that this was a universal concept!
 
 === REST API Integration
-Testing our microservice's REST API is quite simple. Of course we can write simple unit tests for all `Controller` classes and call the controller methods directly as a first measure. `Controller` classes should generally be quite straightforward and focus on request and response handling. Avoid putting business logic into controllers, that's none of their business (_best pun ever..._). This makes our unit tests straightforward (or even unnecessary, if it's too trivial).
+Testing our microservice's REST API is quite simple. Of course we can write simple unit tests for all `Controller` classes and call the controller methods directly as a first measure. `Controller` classes should generally be quite straightforward and focus on request and response handling. Avoid putting business logic into controllers, that's none of their business (best pun ever...). This makes our unit tests straightforward (or even unnecessary, if it's too trivial).
 
 As Controllers make heavy use of https://docs.spring.io/spring/docs/current/spring-framework-reference/html/mvc.html[Spring MVC's] annotations for defining endpoints, query parameters and so on we won't get very far with unit tests. We want to see if our API works as expected: Does it have the correct endpoints, interpret input parameters and answer with correct HTTP status codes and response bodies? To do so, we have to go beyond unit tests.
 
 One way to test our API were to start up the entire Spring Boot service and fire real HTTP requests against our API. With this approach we were on the very top of our test pyramid. Luckily there's another, a little less end-to-end way.
 
-Spring MVC comes with a nice testing utility we can use: With https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#boot-features-testing-spring-boot-applications-testing-autoconfigured-mvc-tests[MockMVC]we can spin up a small slice of our spring application, use a <abbr title="Domain-Specific Language">DSL</abbr> to fire test requests at our API and check that the returned data is as expected.
+Spring MVC comes with a nice testing utility we can use: With https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#boot-features-testing-spring-boot-applications-testing-autoconfigured-mvc-tests[MockMVC]we can spin up a small slice of our spring application, use a Domain-Specific Language to fire test requests at our API and check that the returned data is as expected.
 
 Let's see how this works for the `/hello/<lastname>` endpoint `ExampleController`:
 
@@ -739,7 +739,7 @@ Spring and https://github.com/FasterXML/jackson[Jackson] take care of everything
 
 Spring often hides the parsing and converting to JSON part from you as a developer. If you define a method in a `RestController` that returns a POJO, Spring MVC will automatically convert that POJO to a JSON string and put it in the response body. With Spring's `RestTemplate` you get the same magic. Sending a request using `RestTemplate` you can provide a POJO class that should be used to parse the response. Again it's Jackson being used under the hood.
 
-When we talk to the weather API we receive a JSON response. The `WeatherResponse` class is a POJO representation of that JSON structure including all the fields we care about (which is only `response.currently.summary`). Using the `@JsonIgnoreProperties` annotation with the `ignoreUnknown` parameter set to `true` on our POJO objects gives us a https://en.wikipedia.org/wiki/Robustness_principle)https://www.martinfowler.com/bliki/TolerantReader.html[tolerant reader], an interface that is liberal in what data it accepts (following [Postel's Law]. This way there can be all kinds of silly stuff in the JSON response we receive from the weather API. As long as `response.currently.summary` is there, we're happy.
+When we talk to the weather API we receive a JSON response. The `WeatherResponse` class is a POJO representation of that JSON structure including all the fields we care about (which is only `response.currently.summary`). Using the `@JsonIgnoreProperties` annotation with the `ignoreUnknown` parameter set to `true` on our POJO objects gives us a https://www.martinfowler.com/bliki/TolerantReader.html[tolerant reader], an interface that is liberal in what data it accepts (following https://en.wikipedia.org/wiki/Robustness_principle[Postel's Law]. This way there can be all kinds of silly stuff in the JSON response we receive from the weather API. As long as `response.currently.summary` is there, we're happy.
 
 If you want to test-drive your Jackson Mapping take a look at the `WeatherResponseTest`. This one tests the conversion of JSON into a `WeatherResponse` object. Since this deserialization is the only conversion we do in the application there's no need to test if a `WeatherResponse` can be converted to JSON correctly. Using the approach outlined below it's very simple to test serialization as well, though.
 
