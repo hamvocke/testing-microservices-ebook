@@ -301,7 +301,7 @@ Sometimes you'll hear the terms https://en.wikipedia.org/wiki/Functional_testing
 
 Here's the thing: At one point you should make sure to test that your software works correctly from a _user's_ perspective, not just from a technical perspective. What you call these tests is really not that important. Having these tests, however, is. Pick a term, stick to it, and write those tests.
 
-This is also the moment where people talk about Behaviour-Driven Development (BDD) and tools that allow you to implement tests in a BDD fashion. BDD or a BDD-style way of wrtiting tests can be a nice trick to shift your mindset from implementation details towards the users' needs. Go ahead and give it a try.
+This is also the moment where people talk about Behaviour-Driven Development (BDD) and tools that allow you to implement tests in a BDD fashion. BDD or a BDD-style way of writing tests can be a nice trick to shift your mindset from implementation details towards the users' needs. Go ahead and give it a try.
 
 You don't even need to adopt full-blown BDD tools like https://cucumber.io/[Cucumber] (though you can). Some assertion libraries (like http://chaijs.com/guide/styles/#should[chai.js] allow you to write assertions with `should`-style keywords that can make your tests read more BDD-like. And even if you don't use a library that provides this notation, clever and well-factored code will allow you to write user behaviour focused tests. Some helper methods/functions can get you a very long way:
 
